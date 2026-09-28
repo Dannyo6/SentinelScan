@@ -3,9 +3,8 @@
     "@modelcontextprotocol/server-filesystem": "2025.7.1"
   },
   "scripts": {
+    "test": "node --test \"tests/js/*.test.js\"",
     "test:js": "node --test \"tests/js/*.test.js\"",
-    "build:web": "npm --prefix apps/frontend/react-app run build",
-    "deploy": "npm --prefix apps/frontend/react-app run deploy",
-    "deploy:pages": "npm --prefix apps/frontend/react-app run deploy:pages"
+    "build:web": "npm --prefix apps/frontend/react-app run build"
   }
 }

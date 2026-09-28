@@ -7,9 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "oxlint",
-    "preview": "vite preview",
-    "deploy": "wrangler pages deploy dist --project-name sentinelscan-app",
-    "deploy:pages": "wrangler pages deploy dist --project-name sentinelscan-app"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
@@ -36,7 +34,6 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.4",
     "oxlint": "^1.75.0",
-    "vite": "^8.2.0",
-    "wrangler": "^3.114.0"
+    "vite": "^8.2.0"
   }
 }

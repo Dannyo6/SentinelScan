@@ -1,456 +1,203 @@
 <div align="center">
 
-# SENTINELSCAN
+# SENTINELSCAN — Autonomous Web Security Auditing & Compliance Telemetry Platform
 
-### Enterprise Systems Security & Static PE32/PE32+ Forensic Engine
+### Intelligent Reconnaissance & Real-Time Audit Telemetry Engine
 
-*Autonomous Reverse Engineering, Shannon Entropy Vectorization, and Heuristic Import Profiling*
+*Point it. Authorize it. It evaluates, correlates, and scores defenses autonomously.*
 
 ---
 
-[![Cloudflare Pages](https://img.shields.io/badge/CLOUDFLARE_PAGES-sentinelscan--app.pages.dev-F38020?style=for-the-badge&logo=cloudflare&logoColor=white)](https://sentinelscan-app.pages.dev)
-[![Python 3.10+](https://img.shields.io/badge/PYTHON-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
-[![PE32 / PE32+](https://img.shields.io/badge/BINARY_FORMAT-PE32%20%7C%20PE32+-00599C?style=for-the-badge&logo=windows&logoColor=white)](https://learn.microsoft.com/en-us/windows/win32/debug/pe-format)
-[![Static Heuristics](https://img.shields.io/badge/HEURISTICS-MITRE_ATT%26CK_MATRIX-10B981?style=for-the-badge)](https://attack.mitre.org)
-[![MIT License](https://img.shields.io/badge/LICENSE-MIT-7C3AED?style=for-the-badge)](LICENSE)
+![Python](https://img.shields.io/badge/PYTHON-3.11%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Flask](https://img.shields.io/badge/FLASK-BACKEND-000000?style=for-the-badge&logo=flask&logoColor=white)
+![React](https://img.shields.io/badge/REACT-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![Orchestration](https://img.shields.io/badge/ORCHESTRATION-GOOGLE_GEMINI-8E75B2?style=for-the-badge&logo=googlegemini&logoColor=white)
+![Pytest](https://img.shields.io/badge/PYTEST-314_PASSING-0A9EDC?style=for-the-badge&logo=pytest&logoColor=white)
+![License](https://img.shields.io/badge/LICENSE-MIT-green?style=for-the-badge)
 
 </div>
 
 ---
 
-## Executive Summary
+## 🧭 Executive Overview
 
-**SentinelScan** is an executive-grade static binary analysis and reverse engineering platform designed to inspect Portable Executable (PE32/PE32+) binaries under a strict **zero-trust model**. It addresses modern evasion tradecraft where adversaries defeat signature-only defenses through polymorphic packers, crypters, and dynamic import resolution.
+**SentinelScan** is an autonomous web security auditing and compliance telemetry platform engineered to evaluate the defensive posture of web applications and network infrastructure. Rather than relying on static, hardcoded checklist scans that blindly execute identical checks regardless of context, SentinelScan utilizes a high-level LLM agent orchestrator powered by **Google Gemini** that dynamically evaluates diagnostic findings at each milestone, adapts its assessment plan, and dispatches single-purpose diagnostic workers to build an exhaustive, risk-weighted compliance scorecard.
 
-The platform provides dual operational interfaces:
-1. **Cloudflare Pages Web Inspector (`sentinelscan-app`)**: A client-side, zero-trust browser application deployed at [https://sentinelscan-app.pages.dev](https://sentinelscan-app.pages.dev). Files are parsed entirely in-memory using JavaScript `ArrayBuffer` and `DataView` primitives—no executable bytes or binary streams are ever transmitted to a remote server.
-2. **Python Forensic Core CLI (`sentinelscan_cli.py`)**: A dependency-free, headless command-line scanner built on Python 3.10+ standard libraries, emitting structured JSON telemetry for enterprise SIEM ingestion, automated CI/CD pipelines, and threat intelligence triage.
+The platform couples a high-performance **Python/Flask REST backend** with an enterprise-grade **React 19 interactive telemetry dashboard** featuring reactive component primitives (MagicBento, ScanTerminal, GooeyNav, SpecularButton), backed by a non-blocking **Firestore observability logstore**.
+
+> ⚠️ **Scope & Ethics Notice:** SentinelScan is strictly a defensive compliance assessment and diagnostic auditing platform designed for authorized security verification. All workers execute non-destructive, non-exploitative queries (DNS zone evaluation, SSL/TLS handshake inspection, HTTP security header verification, and cookie flags). It does not execute weaponized payloads or exploits.
 
 ---
 
-## The Concrete Threat Scenario: Why SHA-256 Hash Matching Fails
+## 🏛️ System Architecture
 
-In contemporary enterprise threat landscapes, relying on cryptographic checksums (MD5, SHA-1, SHA-256) for malware triage introduces severe blind spots against modern adversaries.
+SentinelScan follows a strict separation of concerns across its three primary architectural tiers:
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
-│                   TRADITIONAL HASH MATCHING FAILURES                   │
-├────────────────────────────────────────────────────────────────────────┤
-│ 1. Polymorphic Packing: UPX, Themida, Enigma, custom stubs           │
-│    -> Appending 1 benign overlay byte mutates 100% of the SHA-256 hash │
-│                                                                        │
-│ 2. Dynamic API Resolution: Hiding Imports from Static Scanners         │
-│    -> Malicious functions (VirtualAllocEx, WriteProcessMemory) do NOT   │
-│       appear in the Import Address Table (IAT)                         │
-│    -> Adversary calls LoadLibraryA("kernel32.dll") + GetProcAddress()  │
-│       or parses PEB -> LDR_DATA_TABLE_ENTRY export tables in memory    │
-│                                                                        │
-│ 3. Memory Self-Modification (W^X Violations)                          │
-│    -> Packed stub unpacks real malicious payload into RAM at runtime   │
+│                   REACT 19 INTERACTIVE TELEMETRY UI                    │
+│    • ScanTerminal (ASCII figlet, word-reveal spring animation)         │
+│    • MagicBento (spotlight glow, particle magnetism scorecards)        │
+│    • GooeyNav (fluid navigation tabs) & SpecularButton (WebGL canvas)  │
+│    • Real-time REST polling & CustomEvent browser bridge               │
+└────────────────────────────────────┬───────────────────────────────────┘
+                                     │ HTTP REST (/api/v1/scans, /telemetry)
+                                     ▼
+┌────────────────────────────────────────────────────────────────────────┐
+│                      FLASK BACKEND & CONTROLLER                        │
+│    • REST API Routing (/api/v1/scans, /reports, /telemetry)            │
+│    • Background thread scan worker lifecycle management               │
+│    • SSRF validator, IP subnet guards, and domain blocklists           │
+│    • Firestore event pipeline sink & correlation trace management      │
+└────────────────────────────────────┬───────────────────────────────────┘
+                                     │ Context & Milestone State
+                                     ▼
+┌────────────────────────────────────────────────────────────────────────┐
+│                  GEMINI AGENT WORKFLOW ORCHESTRATOR                    │
+│    • Sole intelligence hub (apps/backend/agent/orchestrator.py)         │
+│    • Evaluates worker telemetry in an adaptive feedback loop           │
+│    • Quantifies risk vectors using mathematical CVSS v3.1 scoring      │
+│    • Generates publication-ready PDF and JSON audit deliverables       │
+└────────────────────────────────────┬───────────────────────────────────┘
+                                     │ Dispatches Tool Execution
+                                     ▼
+┌────────────────────────────────────────────────────────────────────────┐
+│            11 SINGLE-PURPOSE DIAGNOSTIC WORKERS (Zero Logic)           │
+│    DNS • Reverse DNS • WHOIS • Port Availability • SSL/TLS Audit       │
+│    HTTP Headers • Cookie Analysis • Robots.txt • Sitemap • DDoS WAF    │
 └────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 1. Hash Brittleness Against Polymorphic Re-Packing
-Cryptographic hash functions are deliberately engineered with the **avalanche effect**: flipping a single bit produces an uncorrelated, pseudorandom digest. Threat actors exploit this by:
-- Recompiling or repacking the identical malicious payload with polymorphic packers (e.g., UPX, MPRESS, ASPack, or bespoke crypters).
-- Appending ephemeral junk bytes to the binary overlay or unmapped section tail.
-- Altering the PE timestamp (`TimeDateStamp` in the COFF header).
+---
 
-While the file hash changes entirely—rendering static hash blocklists (VirusTotal, IOC feeds) useless—the **structural section topology, byte entropy distribution, and underlying behavioral intent remain identifiably anomalous**.
+## 🧠 Autonomous Agent Logic & Workflow
 
-### 2. Static Evasion via Dynamic API Resolution
-Standard anti-malware scanners inspect the PE **Import Address Table (IAT)** to detect capabilities (e.g., process injection or network beacons). Advanced malware evades this by stripping imports:
-- The binary imports only two baseline functions: `LoadLibraryA` (or `LoadLibraryW`) and `GetProcAddress`.
-- At runtime, the loader dynamically loads target DLLs (`ntdll.dll`, `kernel32.dll`) and queries procedure addresses using obfuscated or hashed strings (e.g., ROR13 hashes).
-- Advanced loaders bypass the IAT entirely by walking the Process Environment Block (`fs:[0x30]` on x86, `gs:[0x60]` on x64), traversing `PEB->Ldr->InMemoryOrderModuleList`, locating `kernel32.dll`, and indexing its Export Directory Table manually.
+Traditional scanners execute linear scripts that generate overwhelming walls of unstructured text. SentinelScan inverts this paradigm:
 
-**SentinelScan bypasses these evasion strategies** by evaluating multi-vector heuristics: detecting dynamic resolution API clusters, flagging high Shannon entropy sections characteristic of packed code, identifying sections marked simultaneously Writable and Executable ($W \oplus X$ violations), and inspecting section virtual-to-raw size inflation.
+1. **Autonomous Decision Loop:** The Gemini agent is the sole decision-maker. It receives the target host and chooses the initial reconnaissance tool.
+2. **Evidence-Driven Worker Sequencing:** When a worker completes, its structured JSON output is parsed by the agent. If the DNS lookup exposes multiple subdomains or open services, the agent prioritizes SSL/TLS and security header inspections on relevant endpoints.
+3. **Dumb Workers Principle:** Diagnostic workers located in `apps/backend/workers/` contain **zero business logic, zero orchestration logic, and zero persistence**. Each worker accepts targeted inputs, performs a deterministic network or protocol query, and returns normalized JSON.
+4. **Deterministic Fallback Engine:** For environments without external LLM connectivity, an offline deterministic state machine (`apps/backend/agent/orchestrator.py`) provides reliable assessment execution.
+5. **Standardized Severity Scoring:** Findings are evaluated mathematically using CVSS v3.1 base metric equations rather than subjective heuristics.
 
 ---
 
-## System Architecture
+## 🧰 Diagnostic Workers Specification
 
-SentinelScan follows a modular forensic pipeline:
+| Domain | Worker Identifier | Implementation Module | Technical Inspection Scope |
+|---|---|---|---|
+| **Topology** | `dns_lookup` | `dns_worker.py` | A, AAAA, MX, NS, TXT, CNAME, SPF resolution via `dnspython`; DNSSEC verification. |
+| **Topology** | `reverse_dns_lookup` | `reverse_dns_worker.py` | PTR pointer validation, IPv4/IPv6 address normalization, and host correlation. |
+| **Reconnaissance** | `whois_lookup` | `whois_worker.py` | Registrar status, creation dates, expiration horizons, and nameserver ownership. |
+| **Reconnaissance** | `port_scan` | `portscan_worker.py` | Non-intrusive TCP port state audit via `python-nmap` with socket-connect fallback. |
+| **Web Surface** | `ssl_check` | `ssl_worker.py` | X.509 validity, expiration dates, protocol versions (TLS 1.2/1.3), cipher suites. |
+| **Web Surface** | `http_headers` | `headers_worker.py` | Audits HSTS, CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy. |
+| **Web Surface** | `cookie_analysis` | `cookie_worker.py` | Evaluates `Secure`, `HttpOnly`, and `SameSite` flags across all session cookies. |
+| **Exposure** | `robots_txt_parse` | `robots_worker.py` | Disallowed path extraction, crawl-delay directives, and administrative exposure checks. |
+| **Exposure** | `sitemap_parse` | `sitemap_worker.py` | Sitemap index parsing, canonical URI harvesting, and endpoint validation. |
+| **Resilience** | `ddos_resilience_check` | `ddos_worker.py` | Passive CDN edge detection (Cloudflare, CloudFront), WAF detection, rate-limiting headers. |
+| **Assessment** | `calculate_cvss` | `orchestrator.py` | Quantitative CVSS v3.1 base score computation and severity rating. |
+| **Deliverables** | `generate_report` | `report_worker.py` | Formats aggregate findings into PDF (`reportlab`) and JSON compliance reports. |
 
-```mermaid
-flowchart TD
-    subgraph INGEST ["1. Binary Ingest & Validation"]
-        A["Target Binary (.exe / .dll / .sys)"] --> B["DOS Header Check: e_magic == 0x5A4D ('MZ')"]
-        B --> C["Extract e_lfanew Offset to NT Header"]
-        C --> D["NT Signature Check: Signature == 0x00004550 ('PE\\0\\0')"]
-    end
+---
 
-    subgraph HEADERS ["2. Header Traversal & Mitigation Audit"]
-        D --> E["COFF File Header<br/>(Machine Arch, NumberOfSections, TimeDateStamp)"]
-        D --> F["Optional Header<br/>(Magic PE32/PE32+, EntryPoint, ImageBase, Subsystem)"]
-        F --> G["Exploit Mitigations Check<br/>(ASLR, DEP/NX, CFG, High Entropy VA)"]
-        F --> H["Section Header Table Traversal<br/>(.text, .rdata, .data, UPX0, UPX1)"]
-    end
+## 📊 Dual UI & Telemetry Pipeline
 
-    subgraph HEURISTICS ["3. Mathematical Vectorization & Import Heuristics"]
-        H --> I["Shannon Entropy Engine<br/>H(X) = -sum p(x) log2 p(x)"]
-        H --> J["Section Topology Analysis<br/>(VirtualSize vs RawSize, W^X Permissions)"]
-        H --> K["IAT Import Resolution<br/>(IMAGE_IMPORT_DESCRIPTOR Traversal)"]
-        I --> L{"Entropy >= 7.2<br/>or Packed Names?"}
-        K --> M["MITRE ATT&CK Matrix Cross-Referencing"]
-    end
+SentinelScan delivers real-time observability across two complementary interfaces:
 
-    subgraph SCORING ["4. Risk Scoring & Telemetry Emission"]
-        L --> N["Heuristic Risk Scoring Engine (0 - 100)"]
-        J --> N
-        M --> N
-        G --> N
-        N --> O["Structured JSON Telemetry (RFC 8259)"]
-        O --> P["CLI stdout / File Export"]
-        O --> Q["Cloudflare Pages Client Inspector (Zero-Trust UI)"]
-    end
+- **React 19 Telemetry Dashboard (`apps/frontend/react-app`):**
+  - **`ScanTerminal`:** Real-time event log terminal featuring an ASCII figlet banner, word-by-word spring typing animations, and categorized status badges.
+  - **`MagicBento`:** Multi-card bento grid with global spotlight effects, cursor particle magnetism, and interactive compliance categories.
+  - **`GooeyNav` & `SpecularButton`:** Fluid tab selection and WebGL specular highlight canvas buttons.
+- **Structured Observability Logstore:**
+  - Non-blocking browser telemetry ingest via `POST /api/v1/telemetry`.
+  - Batch event validation, correlation ID (`trace_id`, `session_id`) tracking, and thread-isolated Firestore logging sink.
+
+---
+
+## 🚀 Setup & Runbook
+
+### Prerequisites
+- **Python 3.11+** (tested and verified on Python 3.11 – 3.14)
+- **Node.js 20+** and `npm`
+- **Nmap** (optional; socket-connect fallback automatically activates if Nmap is absent)
+- **Google Gemini API Key** (optional for live AI agent loop; offline deterministic mode is enabled by default)
+
+### 1. Repository Configuration
+Clone the repository and initialize environment variables:
+```bash
+git clone https://github.com/Dannyo6/SentinelScan.git
+cd SentinelScan
+
+cp .env.example .env
+# Configure GEMINI_API_KEY in .env if using live AI orchestration
 ```
 
----
-
-## MITRE ATT&CK Detection Matrix
-
-SentinelScan correlates extracted IAT imports and section traits against critical MITRE ATT&CK techniques:
-
-| MITRE ATT&CK Technique | ID | Win32 / Native API Cluster | Forensic Indicator / Behavior |
-| :--- | :--- | :--- | :--- |
-| **Process Hollowing / Injection** | `T1055` | `VirtualAllocEx` + `WriteProcessMemory` + `CreateRemoteThread`, `NtUnmapViewOfSection`, `SetThreadContext`, `ResumeThread` | Allocates unmapped remote process memory, unmaps legitimate code (hollowing), writes payload, and redirects thread execution context. |
-| **Dynamic API Resolution** | `T1027.007` | `LoadLibraryA`, `LoadLibraryW`, `GetProcAddress`, `LdrLoadDll`, `LdrGetProcedureAddress` | Obfuscates static import visibility; dynamically resolves sensitive routines at runtime to defeat static IAT auditing. |
-| **Input Capture (Keylogging)** | `T1056.001` | `SetWindowsHookExA`, `SetWindowsHookExW`, `GetAsyncKeyState`, `GetKeyState`, `GetKeyboardState` | Installs global Windows message hooks or polls hardware keyboard state to capture keystrokes and credentials. |
-| **Virtualization & Sandbox Evasion** | `T1497` | `IsDebuggerPresent`, `CheckRemoteDebuggerPresent`, `NtQueryInformationProcess`, `OutputDebugStringA`, `QueryPerformanceCounter` | Checks for attached debuggers, hypervisors, and sandbox timing artifacts prior to payload execution. |
-| **Persistence / Boot Execution** | `T1547` | `RegSetValueExA`, `RegSetValueExW`, `CreateServiceA`, `CreateServiceW`, `AdjustTokenPrivileges` | Registers Run keys in Windows Registry or provisions persistent Windows services for survival across reboots. |
-| **Self-Modifying / Memory Violation** | `T1055` | Section Flags: `IMAGE_SCN_MEM_WRITE` $\land$ `IMAGE_SCN_MEM_EXECUTE` ($W \oplus X$ violation) | Section possesses both write and execute permissions simultaneously; typical of in-place unpackers and runtime decrypters. |
-| **Software Packing** | `T1027.002` | Section Names: `UPX0`, `UPX1`, `.aspack`, `.mpress`, `.themida`, `.vmp`, `PEC2` | Known packer section headers indicating automated compression or virtualization wrapper. |
-
----
-
-## Formal Mathematics: Shannon Entropy Vectorization
-
-To measure information density and detect cryptographic or compressed payloads without prior signatures, SentinelScan calculates **Shannon Entropy** across the raw byte streams of individual sections and the overall binary.
-
-### 1. Entropy Formula
-Given a discrete byte sequence $X = \{b_1, b_2, \dots, b_N\}$ where each byte $b_j \in [0, 255]$:
-
-$$H(X) = -\sum_{i=0}^{255} p(x_i) \log_2 p(x_i)$$
-
-Where:
-- $p(x_i) = \frac{\text{count}(x_i)}{N}$ denotes the empirical probability of byte value $x_i$ occurring in the block.
-- $\log_2$ is the base-2 logarithm, measuring entropy in **bits per byte** ($0.0 \le H(X) \le 8.0$).
-- $p(x_i) \log_2 p(x_i) \equiv 0$ when $p(x_i) = 0$.
-
-### 2. Empirical Baseline Thresholds
-
-| Entropy Range $H(X)$ | Classification | Typical Content & Artifacts | Forensic Significance |
-| :--- | :--- | :--- | :--- |
-| **$0.0000 - 5.5000$** | **Benign Compiled Code** | Native x86/x64 machine instructions, sparse tables, ASCII/Unicode string literals, padding nulls. | Normal compiled executable code. Low variance in byte frequencies. |
-| **$5.5001 - 6.8000$** | **Lightweight Assets** | Compiled resource tables, icons, compressed bitmaps, localized string databases, debug symbols. | Standard for rich desktop applications with embedded UI assets. |
-| **$6.8001 - 7.1999$** | **Elevated Density** | Highly optimized byte streams, dense compressed archives, bytecode containers (.NET/Java). | Warrant scrutiny; evaluate virtual-to-raw size disparity. |
-| **$\ge 7.2000$** | **Packed / Encrypted** | Polymorphic packer stubs, AES/RC4 ciphertext, compressed shellcode, high-entropy crypters. | **High Risk Indicator**. Natural compiled code rarely exceeds 7.2 bits/byte without active compression or encryption. |
-
-### 3. Allocation Disparity ($\Delta_{\text{alloc}}$)
-When evaluating packed sections (e.g., `UPX0`), SentinelScan compares the **Virtual Size** against the **Size of Raw Data**:
-
-$$\Delta_{\text{alloc}} = \text{VirtualSize} - \text{SizeOfRawData}$$
-
-If $\text{SizeOfRawData} = 0$ while $\text{VirtualSize} > 0$, or if $\text{VirtualSize} \gg \text{SizeOfRawData}$, the PE loader allocates uninitialized memory space in RAM that will subsequently be populated by an unpacker loop at runtime.
-
----
-
-## CLI Usage Runbook
-
-The SentinelScan CLI core (`sentinelscan_cli.py`) is written in pure Python 3.10+ without third-party C-extension dependencies.
-
-### 1. Environment Setup
-
+### 2. Python Backend Setup
+Initialize the virtual environment and install backend dependencies:
 ```bash
-# Clone the repository
-git clone https://github.com/Zopyrus269/sentinelscan.git
-cd sentinelscan
-
-# Initialize Python virtual environment
+# Create and activate virtual environment
 python -m venv .venv
-
-# Activate virtual environment
-# Windows:
-.venv\Scripts\activate
-# Linux/macOS:
+# On Windows PowerShell:
+.venv\Scripts\Activate.ps1
+# On Linux/macOS:
 source .venv/bin/activate
 
-# Optional: verify Python version (3.10+ required)
-python --version
+# Install dependencies
+pip install -r requirements.txt
 ```
 
-### 2. Command Flags & Arguments
-
-```
-usage: sentinelscan_cli.py [-h] --target TARGET [--verbose] [--export-json EXPORT_JSON]
-
-SentinelScan: Static PE32/PE32+ Binary Header, Section Entropy & Heuristic Analyzer
-
-options:
-  -h, --help            Show this help message and exit
-  --target TARGET, -t TARGET
-                        Absolute or relative path to target PE binary (.exe, .dll, .sys)
-  --verbose, -v         Enable verbose forensic telemetry output in terminal
-  --export-json EXPORT_JSON, -o EXPORT_JSON
-                        Export full structured forensic telemetry to JSON file
-```
-
-### 3. Execution Examples
-
-#### Basic Inspection:
+Run the backend Flask REST service:
 ```bash
-python sentinelscan_cli.py --target C:\Windows\System32\notepad.exe
+flask --app apps.backend.app run --port 5000
 ```
+The REST API will be available at `http://127.0.0.1:5000/api/v1`.
 
-#### Verbose Forensic Triage with Telemetry Export:
-```bash
-python sentinelscan_cli.py --target ./suspicious_sample.exe --verbose --export-json ./sample_report.json
-```
-
----
-
-## Structured JSON Telemetry Schema
-
-The CLI and Cloudflare Pages web application adhere to a unified JSON telemetry schema:
-
-```json
-{
-  "timestamp": "2026-09-28T17:45:57.266877+00:00",
-  "engine": "SentinelScan v2.4 (Python CLI Forensic Core)",
-  "hashes": {
-    "sha256": "468ffe129c395abf6b21a09efdf261910a95fb98aa982ead73caa7b2b684577e",
-    "sha1": "76cd26b59923157e09d2bc927ba8fb059f3155dc",
-    "md5": "8a1d8175ccca97054cdb25acbb4cc07e"
-  },
-  "meta": {
-    "fileName": "sample_dropper.exe",
-    "fileSize": 421888,
-    "architecture": "x86 (PE32 / i386)",
-    "formatName": "PE32 (32-bit)",
-    "is64Bit": false,
-    "compileTimestamp": "Thu, 24 Sep 2026 14:22:10 GMT",
-    "subsystem": "Windows GUI"
-  },
-  "headers": {
-    "dos": {
-      "e_magic": "0x5A4D",
-      "e_lfanew": "0x00E8"
-    },
-    "fileHeader": {
-      "machine": "0x014C",
-      "numberOfSections": 3,
-      "timeDateStamp": 1790259730,
-      "characteristics": "0x0102"
-    },
-    "optionalHeader": {
-      "magic": "0x010B",
-      "addressOfEntryPoint": "0x00054320",
-      "imageBase": "0x00400000",
-      "sectionAlignment": 4096,
-      "fileAlignment": 512,
-      "sizeOfImage": 614400,
-      "sizeOfHeaders": 1024,
-      "subsystem": 2,
-      "dllCharacteristics": "0x8140"
-    }
-  },
-  "mitigations": {
-    "aslr": true,
-    "dep_nx": true,
-    "no_seh": false,
-    "cfg": false,
-    "high_entropy_va": false
-  },
-  "entropy": {
-    "overall": 7.7412,
-    "highest": 7.9124,
-    "classification": {
-      "level": "Packed / Encrypted",
-      "threshold": ">= 7.2",
-      "description": "Near-maximal randomness characteristic of polymorphic packers or cryptographic payloads."
-    }
-  },
-  "sections": [
-    {
-      "name": "UPX0",
-      "virtualSize": 368640,
-      "virtualAddress": "0x00001000",
-      "virtualAddressInt": 4096,
-      "sizeOfRawData": 0,
-      "pointerToRawData": 0,
-      "rawPointerHex": "0x00000000",
-      "entropy": 0.0,
-      "classification": {
-        "level": "Benign Code",
-        "threshold": "0.0 - 5.5",
-        "description": "Zero allocation unmapped block."
-      },
-      "isReadable": true,
-      "isWritable": true,
-      "isExecutable": true,
-      "isWX": true,
-      "isPackedName": true
-    },
-    {
-      "name": "UPX1",
-      "virtualSize": 225280,
-      "virtualAddress": "0x0005B000",
-      "virtualAddressInt": 372736,
-      "sizeOfRawData": 224768,
-      "pointerToRawData": 1024,
-      "rawPointerHex": "0x00000400",
-      "entropy": 7.9124,
-      "classification": {
-        "level": "Packed / Encrypted",
-        "threshold": ">= 7.2",
-        "description": "Dense compressed payload stream."
-      },
-      "isReadable": true,
-      "isWritable": true,
-      "isExecutable": true,
-      "isWX": true,
-      "isPackedName": true
-    }
-  ],
-  "imports": [
-    {
-      "module": "KERNEL32.DLL",
-      "apiCount": 4,
-      "apis": [
-        "LoadLibraryA",
-        "GetProcAddress",
-        "VirtualProtect",
-        "ExitProcess"
-      ]
-    }
-  ],
-  "heuristics": {
-    "score": 92,
-    "verdict": "MALICIOUS / HIGH RISK",
-    "verdictColor": "rose",
-    "detectedThreats": [
-      {
-        "id": "dynamic_resolution",
-        "tactic": "T1027.007 - Dynamic API Resolution & Evasion",
-        "severity": "HIGH",
-        "description": "Obfuscates static IAT dependencies by resolving malicious Windows functions at runtime.",
-        "matchedApis": ["LoadLibraryA", "GetProcAddress"]
-      },
-      {
-        "id": "high_entropy",
-        "tactic": "T1027 - Obfuscated Files: High Entropy Section",
-        "severity": "HIGH",
-        "description": "Section entropy (7.9124) exceeds 7.2 baseline, indicating packing or encryption.",
-        "matchedApis": []
-      },
-      {
-        "id": "packed_section",
-        "tactic": "T1027.002 - Software Packing (Known Packer Signature)",
-        "severity": "HIGH",
-        "description": "Identified known packer section names: UPX0, UPX1",
-        "matchedApis": []
-      },
-      {
-        "id": "wx_violation",
-        "tactic": "T1055 - Self-Modifying Code / W^X Memory Violation",
-        "severity": "HIGH",
-        "description": "Section contains simultaneous WRITE and EXECUTE flags: UPX0, UPX1",
-        "matchedApis": []
-      }
-    ],
-    "packedSections": ["UPX0", "UPX1"],
-    "wxSections": ["UPX0", "UPX1"]
-  }
-}
-```
-
----
-
-## Zero-Trust In-Browser Parsing Architecture
-
-The SentinelScan web inspector operates under a strict **Zero-Trust Client Boundary**:
-
-```
-┌────────────────────────────────────────────────────────────────────────┐
-│               AIR-GAPPED CLIENT-SIDE PARSING LIFECYCLE                 │
-├────────────────────────────────────────────────────────────────────────┤
-│ 1. Drag & Drop File -> FileReader.readAsArrayBuffer(file)              │
-│ 2. Web Crypto API  -> crypto.subtle.digest('SHA-256' | 'SHA-1')       │
-│ 3. Memory Parsing  -> Direct DataView pointer arithmetic (MZ / PE)     │
-│ 4. Vectorization   -> Uint32Array frequency table -> Shannon H(X)      │
-│ 5. Heuristic Engine-> MITRE ATT&CK & W^X rule evaluation in JS         │
-│ 6. DOM Rendering   -> Reactive SVG telemetry & memory section maps    │
-│                                                                        │
-│ [AIR-GAP GUARANTEE]: 0 Bytes of Binary Code Transmitted Externally     │
-└────────────────────────────────────────────────────────────────────────┘
-```
-
-### 1. In-Memory Binary Traversal Primitives
-- **`ArrayBuffer` Allocation**: Binaries are ingested directly into a contiguous client-side memory buffer via the HTML5 File API. No server uploads, WebSockets, or remote caching proxies are used.
-- **`DataView` Pointer Traversal**: The forensic engine traverses the DOS header (`IMAGE_DOS_HEADER`), locates the `e_lfanew` offset, validates the `IMAGE_NT_SIGNATURE` (`0x00004550`), and parses both 32-bit (`IMAGE_NT_HEADERS32`) and 64-bit (`IMAGE_NT_HEADERS64`) PE structures with precise little-endian byte-level offset decoding.
-- **`Uint8Array` Section Slicing**: Individual section bodies are isolated using zero-copy sub-arrays (`buffer.slice(ptr, ptr + rawSize)`), enabling instantaneous byte-frequency histogram computation for Shannon entropy calculation.
-
-### 2. Hardware-Accelerated Cryptographic Hashing
-- Utilizes the browser's native **Web Crypto API** (`window.crypto.subtle.digest`) to generate cryptographically collision-resistant SHA-256 and SHA-1 digests directly on the GPU/hardware crypto instructions where available, without third-party WebAssembly or JS cryptographic libraries.
-
-### 3. Client-Side Telemetry Parity
-- The web inspector outputs structured JSON telemetry matching the exact schema emitted by the Python CLI engine (`sentinelscan_cli.py`), allowing seamless cross-validation between automated pipelines and interactive browser-based SOC triage.
-
----
-
-## Web Client & Cloudflare Pages Deployment
-
-The frontend inspector is situated in `apps/frontend/react-app` and configured for Cloudflare Pages project **`sentinelscan-app`**.
-
-### Local Web Development
+### 3. Frontend Client Compilation & Dev Server
+Navigate to the React application workspace:
 ```bash
 cd apps/frontend/react-app
 npm install
+
+# Start development server with Hot Module Replacement (HMR)
 npm run dev
-```
 
-### Production Build & Verification
-```bash
-# From workspace root:
-npm run build:web
-
-# Or from apps/frontend/react-app:
-cd apps/frontend/react-app
+# Compile production bundle
 npm run build
 ```
 
-### Cloudflare Pages Deployment
-To deploy directly via the Cloudflare Wrangler CLI:
+Production static assets compile cleanly into `apps/frontend/react-app/dist/`.
 
+---
+
+## 🧪 Comprehensive Verification & Test Suite
+
+SentinelScan maintains comprehensive, regression-tested test coverage across both its backend services and frontend telemetry runtime:
+
+### Python Backend Suite (Pytest)
 ```bash
-# Authenticate (first time only)
-npx wrangler login
-
-# Deploy production bundle
-npm run deploy:pages
-# Output maps to: https://sentinelscan-app.pages.dev
+# Run all 314+ backend unit, integration, and worker tests:
+pytest tests/
 ```
+Covers:
+- All 11 diagnostic worker contracts and network fault fallback mechanisms
+- Offline agent orchestrator loops and Gemini client mock routines
+- REST route validation, rate limiting, and SSRF prevention guards
+- Firestore logstore schema, query filters, and rollups
 
-`wrangler.toml` configuration:
-```toml
-name = "sentinelscan-app"
-compatibility_date = "2024-09-28"
-pages_build_output_dir = "dist"
+### Frontend Telemetry Suite (Node Test Runner)
+```bash
+# Run JavaScript telemetry unit tests:
+npm test
 ```
+Covers:
+- Event burst throttling and payload batching constraints
+- Correlation IDs and trace inheritance
+- Token authorization attachment and fail-safe beacon flush on page unload
+- Zero-throw runtime resilience guarantees
 
 ---
 
-## Security & Ethics Policy
+## 📄 License & Compliance
 
-SentinelScan is an offensive-security and malware-forensics inspection engine designed for **defensive telemetry analysis, reverse engineering education, authorized pentesting, and incident response**.
-
-- It does not generate or drop exploitation payloads.
-- It does not perform active network penetration or denial-of-service tests.
-- All binary parsing in the web inspector operates locally within the user's browser sandbox under zero-trust constraints.
-
----
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
+Distributed under the **MIT License**. SentinelScan is strictly designed for legitimate system administration, internal network assessment, and authorized security compliance verification.
