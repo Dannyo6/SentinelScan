@@ -103,30 +103,20 @@ secrets/
 auth_session.json
 scripts/oauth_client.json
 
-# Claude Code local-only files
-.claude/settings.local.json
+# Claude & AI Agent local state and indexing artifacts
+.claude/
+.mcp.json
+.graphifyignore
+graphify-out/
 
 # Obsidian vault local state (not project content)
 .obsidian/
 
-# Graphify local-only cost log (graphify-out/ itself is committed — see CLAUDE.md)
-graphify-out/cost.json
-
-# Graphify's internal AST/stat cache — pure local performance cache, regenerates
-# automatically from file mtimes/hashes, nothing to review in a diff. Also trips
-# gitleaks' generic-api-key rule: stat-index.json stores SHA256 content hashes
-# per file, which read as high-entropy secret-shaped strings (false positive,
-# confirmed 2026-08-20 — see knowledge/DECISIONS.md).
-graphify-out/cache/
-
-# Graphify auto-snapshots graph.json + friends into a dated subfolder before
-# every overwrite of a labeled/semantic graph (graphify/export.py's
-# backup_if_protected()) — a full duplicate of the committed graph.json,
-# redundant with git's own history of that file. Run extract/label with
-# GRAPHIFY_NO_BACKUP=1 to stop them being created at all; this pattern is a
-# backstop for any that slip through (confirmed 2026-08-21 — see
-# knowledge/DECISIONS.md).
-graphify-out/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/
+# Local Environment Variables & Secrets
+.env
+.env.*
+.env.local
+!.env.example
 
 # Node dependencies and Cloudflare / Vercel build artifacts
 node_modules/
