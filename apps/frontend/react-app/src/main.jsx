@@ -17,6 +17,7 @@ import { ReportMetaBento, ReportSummaryBento, ReportRiskBento, ReportNoScanNotic
 import ReportCrawl from './components/ReportCrawl/ReportCrawl.jsx'
 import DocsExplorer from './components/DocsExplorer/DocsExplorer.jsx'
 import GooeyActionNav from './components/GooeyActionNav/GooeyActionNav.jsx'
+import App from './App.jsx'
 
 // 1x1 transparent gif -- the shipped component always renders an <img>
 // for its own logo slot, defaulting to a React Bits demo asset path that
@@ -289,19 +290,27 @@ function SiteBackground() {
   )
 }
 
-// The background and the intro overlay are mounted as two independent React
-// roots (rather than siblings in one tree) so that unmounting the intro can
-// never affect the background's reconciliation, even indirectly -- the
-// FloatingLines WebGL scene and its clock keep running the whole time and
-// are never touched when the intro finishes.
-const bgMountPoint = document.createElement('div')
-document.body.insertBefore(bgMountPoint, document.body.firstChild)
+const rootMountPoint = document.getElementById('root')
+if (rootMountPoint) {
+  createRoot(rootMountPoint).render(
+    <StrictMode>
+      <App />
+    </StrictMode>,
+  )
+} else {
+  // The background and the intro overlay are mounted as two independent React
+  // roots (rather than siblings in one tree) so that unmounting the intro can
+  // never affect the background's reconciliation, even indirectly -- the
+  // FloatingLines WebGL scene and its clock keep running the whole time and
+  // are never touched when the intro finishes.
+  const bgMountPoint = document.createElement('div')
+  document.body.insertBefore(bgMountPoint, document.body.firstChild)
 
-createRoot(bgMountPoint).render(
-  <StrictMode>
-    <SiteBackground />
-  </StrictMode>,
-)
+  createRoot(bgMountPoint).render(
+    <StrictMode>
+      <SiteBackground />
+    </StrictMode>,
+  )
 
 // Own independent root for the same reason as the background above --
 // SplashCursor listens on `window` directly and drives its own rAF loop,
@@ -583,4 +592,5 @@ if (sessionStorage.getItem(INTRO_SEEN_KEY) !== '1') {
       />
     </StrictMode>,
   )
+}
 }

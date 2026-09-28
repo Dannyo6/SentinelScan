@@ -12,8 +12,9 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
-lib64/
+/lib/
+/lib64/
+!apps/frontend/react-app/src/lib/
 parts/
 sdist/
 var/
@@ -126,3 +127,7 @@ graphify-out/cache/
 # backstop for any that slip through (confirmed 2026-08-21 — see
 # knowledge/DECISIONS.md).
 graphify-out/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/
+
+# Cloudflare Pages and Vercel build/cache artifacts
+.wrangler/
+.vercel/
