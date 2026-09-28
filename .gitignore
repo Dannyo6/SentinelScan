@@ -128,6 +128,12 @@ graphify-out/cache/
 # knowledge/DECISIONS.md).
 graphify-out/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/
 
-# Cloudflare Pages and Vercel build/cache artifacts
+# Node dependencies and Cloudflare / Vercel build artifacts
+node_modules/
+dist/
+dist-ssr/
 .wrangler/
 .vercel/
+.wrangler
+.vercel
+

@@ -367,6 +367,38 @@ The CLI and Cloudflare Pages web application adhere to a unified JSON telemetry 
 
 ---
 
+## Zero-Trust In-Browser Parsing Architecture
+
+The SentinelScan web inspector operates under a strict **Zero-Trust Client Boundary**:
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│               AIR-GAPPED CLIENT-SIDE PARSING LIFECYCLE                 │
+├────────────────────────────────────────────────────────────────────────┤
+│ 1. Drag & Drop File -> FileReader.readAsArrayBuffer(file)              │
+│ 2. Web Crypto API  -> crypto.subtle.digest('SHA-256' | 'SHA-1')       │
+│ 3. Memory Parsing  -> Direct DataView pointer arithmetic (MZ / PE)     │
+│ 4. Vectorization   -> Uint32Array frequency table -> Shannon H(X)      │
+│ 5. Heuristic Engine-> MITRE ATT&CK & W^X rule evaluation in JS         │
+│ 6. DOM Rendering   -> Reactive SVG telemetry & memory section maps    │
+│                                                                        │
+│ [AIR-GAP GUARANTEE]: 0 Bytes of Binary Code Transmitted Externally     │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+### 1. In-Memory Binary Traversal Primitives
+- **`ArrayBuffer` Allocation**: Binaries are ingested directly into a contiguous client-side memory buffer via the HTML5 File API. No server uploads, WebSockets, or remote caching proxies are used.
+- **`DataView` Pointer Traversal**: The forensic engine traverses the DOS header (`IMAGE_DOS_HEADER`), locates the `e_lfanew` offset, validates the `IMAGE_NT_SIGNATURE` (`0x00004550`), and parses both 32-bit (`IMAGE_NT_HEADERS32`) and 64-bit (`IMAGE_NT_HEADERS64`) PE structures with precise little-endian byte-level offset decoding.
+- **`Uint8Array` Section Slicing**: Individual section bodies are isolated using zero-copy sub-arrays (`buffer.slice(ptr, ptr + rawSize)`), enabling instantaneous byte-frequency histogram computation for Shannon entropy calculation.
+
+### 2. Hardware-Accelerated Cryptographic Hashing
+- Utilizes the browser's native **Web Crypto API** (`window.crypto.subtle.digest`) to generate cryptographically collision-resistant SHA-256 and SHA-1 digests directly on the GPU/hardware crypto instructions where available, without third-party WebAssembly or JS cryptographic libraries.
+
+### 3. Client-Side Telemetry Parity
+- The web inspector outputs structured JSON telemetry matching the exact schema emitted by the Python CLI engine (`sentinelscan_cli.py`), allowing seamless cross-validation between automated pipelines and interactive browser-based SOC triage.
+
+---
+
 ## Web Client & Cloudflare Pages Deployment
 
 The frontend inspector is situated in `apps/frontend/react-app` and configured for Cloudflare Pages project **`sentinelscan-app`**.
