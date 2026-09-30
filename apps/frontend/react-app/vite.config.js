@@ -11,14 +11,14 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      '@': path.resolve(import.meta.dirname, './src'),
     },
   },
   build: {
     outDir: '../static/react-dist',
     emptyOutDir: true,
     lib: {
-      entry: path.resolve(__dirname, 'src/main.jsx'),
+      entry: path.resolve(import.meta.dirname, 'src/main.jsx'),
       name: 'SentinelScanReact',
       formats: ['iife'],
       fileName: () => 'main.js',
