@@ -1,7 +1,7 @@
 {
-  "name": "sentinelscan-app",
+  "name": "react-app",
   "private": true,
-  "version": "2.4.0",
+  "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",

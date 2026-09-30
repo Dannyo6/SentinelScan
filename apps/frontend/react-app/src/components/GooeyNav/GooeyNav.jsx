@@ -94,10 +94,7 @@ const GooeyNav = ({
   };
 
   const handleClick = (e, index) => {
-    if (items[index]?.onClick) {
-      items[index].onClick(e, index);
-    }
-    const liEl = e.currentTarget.closest('li') || e.currentTarget;
+    const liEl = e.currentTarget;
     if (activeIndex === index) return;
 
     setActiveIndex(index);
