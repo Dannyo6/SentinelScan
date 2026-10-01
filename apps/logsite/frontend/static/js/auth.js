@@ -2,12 +2,13 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/fireba
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBvWgaqLbG9la-77P__L5WACBQ4t3kkCFU",
-  authDomain: "sentinelscan-3f82d.firebaseapp.com",
-  projectId: "sentinelscan-3f82d",
-  storageBucket: "sentinelscan-3f82d.firebasestorage.app",
-  messagingSenderId: "60214574079",
-  appId: "1:60214574079:web:5c6e5cd5004ffe6902c5ca"
+  apiKey: "AIzaSyABwFquskOU9rwZ9LuWzXT5fACXDFGdV1c",
+  authDomain: "sentinelscan-d1116.firebaseapp.com",
+  projectId: "sentinelscan-d1116",
+  storageBucket: "sentinelscan-d1116.firebasestorage.app",
+  messagingSenderId: "1091929407700",
+  appId: "1:1091929407700:web:0cfd8f5666af56199b3b41",
+  measurementId: "G-XGBRSR91V1"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -82,7 +83,7 @@ function updateAuthUI(user) {
 
 function escapeHtml(str) {
   if (!str) return "";
-  return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 
 /* ----------------------------------------------------------------
