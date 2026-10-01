@@ -15,8 +15,8 @@ jobs:
       - name: Probe Main Site Health & Post Telemetry
         env:
           PROBE_TOKEN: ${{ secrets.LOGSITE_PROBE_TOKEN }}
-          MAIN_SITE_URL: ${{ vars.MAIN_SITE_URL || 'https://sentinelscan-yd2u.onrender.com' }}
-          LOGSITE_URL: ${{ vars.LOGSITE_URL || 'https://sentinelscan-logs.onrender.com' }}
+          MAIN_SITE_URL: ${{ vars.MAIN_SITE_URL || 'https://sentinelscan-la8g.onrender.com' }}
+          LOGSITE_URL: ${{ vars.LOGSITE_URL || 'https://sentinelscan-console.onrender.com' }}
         run: |
           START_TIME=$(date +%s%3N)
           CHECKED_AT=$(date -u +"%Y-%m-%dT%H:%M:%SZ")

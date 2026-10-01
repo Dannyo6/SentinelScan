@@ -25,16 +25,14 @@ Covered by the Blueprint already in this repo: `render.yaml`.
 
 ## Log site (`apps/logsite/`)
 
-**Not covered by `render.yaml`** — the previous log site service was created by hand directly
-in the Render dashboard rather than declared in the Blueprint, so a straight "reconnect" only
-brings the main app back. You'll need to create a second Web Service yourself:
+**Now covered by `render.yaml`** — the log site service (`sentinelscan-console`) is fully declared in the Blueprint. Reconnecting the repo will spin up both the main app and the console automatically.
 
-1. Render dashboard → **New → Web Service** → same repo, same `main` branch.
-2. Build command: `pip install -r requirements.txt`
-3. Start command: `gunicorn --workers 1 --bind 0.0.0.0:$PORT apps.logsite.app:app`
-4. Health check path: `/healthz`
-5. Env vars: `FIREBASE_SERVICE_ACCOUNT_PATH`, `LOGSITE_PROBE_TOKEN`, `MAIN_SITE_URL` (the main
-   app's URL from the step above, once you have it).
+## Render Secret Files
+
+Both services require a **Render Secret File** containing the Firebase Admin SDK service account key. 
+- Filename: `firebase-credentials.json`
+- Mount Path: `/etc/secrets/firebase-credentials.json`
+Ensure `FIREBASE_SERVICE_ACCOUNT_PATH` (or `GOOGLE_APPLICATION_CREDENTIALS`) is set to this mount path in the environment variables.
 
 Both services need `--workers 1` — active-scan/session state lives in-process, not in a shared
 store, so a second worker would silently drop state. See `docs/ARCHITECTURE.md`.

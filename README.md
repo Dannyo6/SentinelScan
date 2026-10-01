@@ -168,6 +168,13 @@ npm run build
 
 Production static assets compile cleanly into `apps/frontend/react-app/dist/`.
 
+### 4. Production Deployment (Render)
+SentinelScan is deployed as a unified monorepo with two separate Web Services on Render:
+1. **Main App (`sentinelscan`)**: Runs the core Flask backend and serves the React frontend bundle.
+2. **Log Site (`sentinelscan-console`)**: Runs the developer observability console.
+
+Both services require the `firebase-credentials.json` Render Secret File mounted at `/etc/secrets/firebase-credentials.json` to authenticate with Firebase Admin.
+
 ---
 
 ## 🧪 Comprehensive Verification & Test Suite
