@@ -2,6 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/fireba
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
+  // gitleaks:allow
   apiKey: "AIzaSyABwFquskOU9rwZ9LuWzXT5fACXDFGdV1c",
   authDomain: "sentinelscan-d1116.firebaseapp.com",
   projectId: "sentinelscan-d1116",
