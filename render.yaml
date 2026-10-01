@@ -30,3 +30,13 @@ services:
       # Render dashboard, and flipping it on is a deliberate act rather than a discovery.
       - key: SENTINELSCAN_TELEMETRY_ENABLED
         value: "0"
+
+  - type: web
+    name: sentinelscan-console
+    env: python
+    plan: free
+    branch: main
+    autoDeploy: true
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn --workers 1 --bind 0.0.0.0:$PORT apps.logsite.app:app
+    healthCheckPath: /healthz
